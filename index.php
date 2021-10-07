@@ -66,3 +66,60 @@ switch ($age) {
     default:
         echo "Je n'ai pas de message particulier";
 }
+
+// PARTIE 2 : TEMPERATURES
+
+// Avec mon array prédéfini
+
+$temperatures = [-15,-10,10,20,25,45];
+
+/**
+ * Returns the closest temperature to zero
+ *
+ * @param Array $array
+ * @return int
+ */
+function procheDeZero($array) {
+    
+    // PREMIERE VALIDATION : Si mon array est vide je retourne 0
+    if (!count($array)){
+        return 0;
+    }
+    
+    
+    // Je classe mon tableau afin de faciliter l'itération
+    sort($array);
+
+    // Je déclare ma variable closest qui va contenir le résultat qu'il faudra retourner à la fin, par défaut on considère que c'est le premier élément du tableau une fois qu'on a utilisé la fonction sort()
+    $closest = $array[0];
+
+    // On fera une boucle sur l'array pour vérifier certaines conditions
+
+    foreach ($array as $temperature) {
+        // Le nombre le plus proche de zéro est par définition celui dont la valeur absolue est la plus proche de zéro.
+
+        // Je vais donc vérifier dans mon tableau organisé deux par deux les valeurs absolues de mes éléments en partant de l'élément que j'ai désigné au départ. Si il est le plus proche de zéro des deux alors il ne changera pas, sinon il prendra la valeur du chiffre le plus proche.
+        if(abs($temperature) < abs($closest)){
+            $closest = $temperature;
+        }
+
+        // Enfin je vais englober mon cas négatif : Si on possède deux valeur équidistantes de zéro, mais que l'une est négative et l'autre pas alors on va conserver la positive.
+        if(abs($closest) == abs($temperature) && $temperature > 0){
+            $closest = $temperature;
+        }
+
+        // BONUS : Vous remarquerez que le code à l'intérieur des deux if est identique : On peut donc le factoriser
+        // Etant donné que nos deux if sont non cumulatifs (comprenez, on ne peut pas être dans les deux cas de figures à la fois) alors on va utiliser un || pour les combiner.
+
+        // if(abs($temperature) < abs($closest) || (abs($closest) == abs($temperature) && $temperature > 0)){
+        //     $closest = $temperature;
+        // }
+
+    }
+
+    // Je retourne enfin le dernier nombre retenu par la fonction.
+    return $closest;
+
+}
+
+echo $procheDeZero($temperatures);
